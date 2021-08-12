@@ -2,14 +2,13 @@ package com.example.portugal1576.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.portugal1576.R
 import com.example.portugal1576.adapters.ViewPagerAdapter
 import com.example.portugal1576.databinding.ActivityMainBinding
 import com.example.portugal1576.ui.fragments.FavouritesFragment
-import com.example.portugal1576.ui.fragments.NewsFragment
+import com.example.portugal1576.ui.fragments.news.NewsFragment
 import com.example.portugal1576.ui.fragments.VideoFragment
 import com.google.android.material.tabs.TabLayoutMediator
 

@@ -8,7 +8,8 @@ class BidingAdapter {
     companion object {
         @JvmStatic
         @BindingAdapter("app:img")
-        fun loadImage(img: ImageView, url: String){
+        fun loadImage(img: ImageView, url: String?){
+            if (!url.isNullOrBlank())
             img.load(url)
 
         }

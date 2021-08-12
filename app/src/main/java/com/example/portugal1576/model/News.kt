@@ -1,10 +1,20 @@
 package com.example.portugal1576.model
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class News(
-    var title: String,
-    var type: String,
-    var img: String,
-    var click_url: String,
-    var time: String,
-    var top: String
+    @Json(name = "click_url")
+    val click_url: String,
+    @Json(name = "img")
+    val img: String?,
+    @Json(name = "time")
+    val time: String,
+    @Json(name = "title")
+    val title: String,
+    @Json(name = "top")
+    val top: String,
+    @Json(name = "type")
+    val type: String
 )

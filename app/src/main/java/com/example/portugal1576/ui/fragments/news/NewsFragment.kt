@@ -1,21 +1,25 @@
-package com.example.portugal1576.ui.fragments
+package com.example.portugal1576.ui.fragments.news
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.portugal1576.R
 import com.example.portugal1576.adapters.RecyclerViewNewsAdapter
 import com.example.portugal1576.databinding.FragmentNewsBinding
 import com.example.portugal1576.model.News
+import com.example.portugal1576.model.Status
 
 class NewsFragment : Fragment(R.layout.fragment_news) {
+    //инициализация viewmodel
+    private val viewModel: NewsViewModel by viewModels()
     val adapterRV = RecyclerViewNewsAdapter()
     private val binding: FragmentNewsBinding by viewBinding(CreateMethod.INFLATE)
     override fun onCreateView(
@@ -23,24 +27,22 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapterRV.listNews = listOf(
-            News(
-                "NEWS",
-                "1",
-                "http://188.40.167.45:3001/img/test3.jpg",
-                "https://lampalampa.net",
-                "2 hour ago",
-                "0"
-            ),
-            News(
-                "NEWS",
-                "1",
-                "http://188.40.167.45:3001/img/test4.jpg",
-                "https://lampalampa.net",
-                "2 hour ago",
-                "0"
-            )
-        ).toMutableList()
+
+        viewModel.status.observe(viewLifecycleOwner, {
+            when(it){
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
+                Status.EMPTY -> {
+
+                }
+                Status.SUCCESS -> adapterRV.listNews = viewModel.list.toMutableList()
+            }
+        })
+
         binding.listNews.layoutManager = LinearLayoutManager(context)
         binding.listNews.adapter = adapterRV
         binding.root.setBackgroundColor(Color.BLACK)
