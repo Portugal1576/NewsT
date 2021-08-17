@@ -8,7 +8,7 @@ import coil.load
 import com.example.portugal1576.databinding.ItemNewsBinding
 import com.example.portugal1576.model.News
 
-class RecyclerViewNewsAdapter: RecyclerView.Adapter<RecyclerViewNewsAdapter.ViewHolder>() {
+class RecyclerViewNewsAdapter(val callback: NewsCallback): RecyclerView.Adapter<RecyclerViewNewsAdapter.ViewHolder>() {
     var listNews: MutableList<News> = emptyList<News>().toMutableList()
         set(value) {
             field = value
@@ -26,8 +26,20 @@ class RecyclerViewNewsAdapter: RecyclerView.Adapter<RecyclerViewNewsAdapter.View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.binding.news = listNews[position]
+        holder.binding.root.setOnClickListener {
+            callback.onItemClick(listNews[position])
+        }
+        holder.binding.root.setOnLongClickListener {
+            callback.onItemClickLong(listNews[position])
+            return@setOnLongClickListener true
+        }
     }
 
     override fun getItemCount(): Int = listNews.size
 
+}
+interface NewsCallback{
+    fun onItemClick(news: News)
+
+    fun onItemClickLong(news: News)
 }
