@@ -16,5 +16,8 @@ data class News(
     @Json(name = "top")
     val top: String,
     @Json(name = "type")
-    val type: String
+    val type: String,
+
+    var viewType: Int = 1
+
 )

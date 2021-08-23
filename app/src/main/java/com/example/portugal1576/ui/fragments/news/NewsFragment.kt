@@ -40,7 +40,20 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                 Status.EMPTY -> {
 
                 }
-                Status.SUCCESS -> adapterRV.listNews = viewModel.list.toMutableList()
+                Status.SUCCESS -> {
+
+                    val list = viewModel.list.toMutableList()
+                    val listImage = mutableListOf<String>()
+                    list[0].viewType = 2
+
+                    for (i in 0..2){
+                        if (list[i].img !=null)
+                        listImage.add(list[i].img.orEmpty())
+                    }
+                    adapterRV.listImage = listImage
+                    adapterRV.listNews = viewModel.list.toMutableList()
+
+                }
             }
         })
 
