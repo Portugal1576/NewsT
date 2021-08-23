@@ -12,25 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.portugal1576.R
-import com.example.portugal1576.adapters.NewsCallback
 import com.example.portugal1576.adapters.RecyclerViewNewsAdapter
 import com.example.portugal1576.databinding.FragmentNewsBinding
-import com.example.portugal1576.model.News
 import com.example.portugal1576.model.Status
 
 class NewsFragment : Fragment(R.layout.fragment_news) {
     //инициализация viewmodel
     private val viewModel: NewsViewModel by viewModels()
-    val adapterRV = RecyclerViewNewsAdapter(object :NewsCallback{
-        override fun onItemClick(news: News) {
-            Toast.makeText(context, news.title, Toast.LENGTH_SHORT).show()
-        }
-
-        override fun onItemClickLong(news: News) {
-            Toast.makeText(context, news.click_url, Toast.LENGTH_SHORT).show()
-        }
-
-    })
+    val adapterRV = RecyclerViewNewsAdapter {
+        Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+    }
     private val binding: FragmentNewsBinding by viewBinding(CreateMethod.INFLATE)
     override fun onCreateView(
         inflater: LayoutInflater,
