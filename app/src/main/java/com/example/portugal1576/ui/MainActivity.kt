@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             listOf<Fragment>(NewsFragment(), VideoFragment(), FavouritesFragment()).toMutableList()
         // установили адаптер для ViewPagger
         binding.pagger.adapter = adapter
+        binding.pagger.isUserInputEnabled = false
 
         // Этот код связывает   pager c tab layaut и возвражает таб и позицию
         TabLayoutMediator(binding.tabBar, binding.pagger) { tab, position ->

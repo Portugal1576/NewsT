@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.portugal1576.R
 import com.example.portugal1576.adapters.RecyclerViewNewsAdapter
 import com.example.portugal1576.databinding.FragmentNewsBinding
+import com.example.portugal1576.model.News
 import com.example.portugal1576.model.Status
 
 class NewsFragment : Fragment(R.layout.fragment_news) {
@@ -44,14 +45,14 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
 
                     val list = viewModel.list.toMutableList()
                     val listImage = mutableListOf<String>()
-                    list[0].viewType = 2
+                    list.add(0, News("","","","","","", 2))
 
-                    for (i in 0..2){
+                    for (i in 1..list.size-1){
                         if (list[i].img !=null)
                         listImage.add(list[i].img.orEmpty())
                     }
                     adapterRV.listImage = listImage
-                    adapterRV.listNews = viewModel.list.toMutableList()
+                    adapterRV.listNews = list
 
                 }
             }
