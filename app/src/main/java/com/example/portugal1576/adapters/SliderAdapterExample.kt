@@ -24,7 +24,7 @@ class SliderAdapterExample(context: Context) :
     SliderViewAdapter<SliderAdapterExample.SliderAdapterVH>() {
     private val context: Context
 
-    var listImage: MutableList<String> = emptyList<String>().toMutableList()
+    var listNews: MutableList<News> = emptyList<News>().toMutableList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -37,8 +37,11 @@ class SliderAdapterExample(context: Context) :
     }
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
-        val sliderItem = listImage[position]
-        if (sliderItem.isNotEmpty()) viewHolder.imageView.load(sliderItem)
+        val sliderItem = listNews[position]
+        viewHolder.imageView.load(sliderItem.img)
+        viewHolder.title.text = sliderItem.title
+        viewHolder.url_news.text = sliderItem.click_url
+        viewHolder.time_news.text = sliderItem.time
 
 
 
@@ -46,7 +49,7 @@ class SliderAdapterExample(context: Context) :
 
     override fun getCount(): Int {
         //slider view count could be dynamic size
-        return listImage.size
+        return listNews.size
     }
 
     inner class SliderAdapterVH(itemView: View) : ViewHolder(itemView) {

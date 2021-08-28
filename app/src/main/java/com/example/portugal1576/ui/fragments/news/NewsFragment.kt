@@ -44,14 +44,14 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                 Status.SUCCESS -> {
 
                     val list = viewModel.list.toMutableList()
-                    val listImage = mutableListOf<String>()
+                    val listImage = mutableListOf<News>()
                     list.add(0, News("","","","","","", 2))
 
                     for (i in 1..list.size-1){
                         if (list[i].img !=null)
-                        listImage.add(list[i].img.orEmpty())
+                        listImage.add(list[i])
                     }
-                    adapterRV.listImage = listImage
+                    adapterRV.hotNews = listImage
                     adapterRV.listNews = list
 
                 }

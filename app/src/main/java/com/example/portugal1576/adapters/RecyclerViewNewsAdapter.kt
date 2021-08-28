@@ -15,7 +15,7 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
 
     val viewType1 = 1
     val viewType2 = 2
-    var listImage: MutableList<String> = emptyList<String>().toMutableList()
+    var hotNews: MutableList<News> = emptyList<News>().toMutableList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -46,7 +46,7 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
 
         fun bind(position: Int) {
 
-            adapter.listImage = listImage
+            adapter.listNews = hotNews
             binding.imageSlider.setSliderAdapter(adapter)
 
         }
