@@ -52,7 +52,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                         listImage.add(list[i])
                     }
                     adapterRV.hotNews = listImage
-                    adapterRV.listNews = list
+                    adapterRV.submitList(viewModel.pagedList)
 
                 }
             }

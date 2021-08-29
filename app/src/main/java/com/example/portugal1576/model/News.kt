@@ -6,17 +6,17 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class News(
     @Json(name = "click_url")
-    val click_url: String,
+    val click_url: String?,
     @Json(name = "img")
     val img: String?,
     @Json(name = "time")
-    val time: String,
+    val time: String?,
     @Json(name = "title")
-    val title: String,
+    val title: String?,
     @Json(name = "top")
-    val top: String,
+    val top: String?,
     @Json(name = "type")
-    val type: String,
+    val type: String?,
 
     var viewType: Int = 1
 

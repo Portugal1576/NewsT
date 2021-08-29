@@ -6,6 +6,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 //JSON конвертор
 private val moshi = Moshi.Builder()
@@ -22,6 +23,8 @@ interface NewsRetrofit{
     @GET (".")
     suspend fun get(): List<News>
 
+    @GET (".")
+    suspend fun getPagin(@Query ("page") page: Int): List<News>
 
 }
 
