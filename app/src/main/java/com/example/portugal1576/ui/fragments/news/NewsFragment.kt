@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.portugal1576.R
@@ -18,6 +19,7 @@ import com.example.portugal1576.model.News
 import com.example.portugal1576.model.Status
 
 class NewsFragment : Fragment(R.layout.fragment_news) {
+
     //инициализация viewmodel
     private val viewModel: NewsViewModel by viewModels()
     val adapterRV = RecyclerViewNewsAdapter {
@@ -29,6 +31,22 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //Pidding
+
+        binding.listNews.addOnScrollListener(object :RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!binding.listNews.canScrollVertically(1) && dy != 0){
+                    viewModel.onScrolled()
+                    //Toast.makeText(context, "SSSSSS", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
         viewModel.status.observe(viewLifecycleOwner, {
             when(it){
@@ -52,8 +70,27 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                         listImage.add(list[i])
                     }
                     adapterRV.hotNews = listImage
-                    adapterRV.submitList(viewModel.pagedList)
+                    adapterRV.listNews = list
 
+                }
+            }
+        })
+
+        viewModel.status2.observe(viewLifecycleOwner, {
+            when(it){
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
+                Status.EMPTY -> {
+
+                }
+                Status.SUCCESS -> {
+                    adapterRV.listNews.addAll(viewModel.list)
+                    adapterRV.notifyDataSetChanged()
+                    adapterRV.notifyItemRangeInserted(0, adapterRV.listNews.size)
                 }
             }
         })

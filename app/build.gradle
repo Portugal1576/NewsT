@@ -66,9 +66,6 @@ dependencies {
     //ImageSlider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
 
-    //paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
-
     //corutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
 

@@ -5,37 +5,59 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PageKeyedDataSource
-import androidx.paging.PagedList
 import com.example.portugal1576.model.News
 import com.example.portugal1576.model.Status
 import com.example.portugal1576.repository.Repository
-import com.example.portugal1576.repository.mDataSource
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
-class NewsViewModel: ViewModel() {
-    lateinit var pagedList: PagedList<News>
-    var list: List<News> = emptyList()
+class NewsViewModel : ViewModel() {
+
+    var page = 0
+    var list: MutableList<News> = mutableListOf()
     private val _status: MutableLiveData<Status> = MutableLiveData()
+    private val _status2: MutableLiveData<Status> = MutableLiveData()
     val status: LiveData<Status> get() = _status
+    val status2: LiveData<Status> get() = _status2
 
-init{
-    _status.value = Status.EMPTY
-    getNews()
-}
+
+    init {
+        _status.value = Status.EMPTY
+        _status2.value = Status.EMPTY
+        getNews()
+    }
 
     private fun getNews() {
         _status.value = Status.LOADING
-        val dataSource: PageKeyedDataSource<Int, News> = mDataSource(viewModelScope)
-        val config = PagedList.Config.Builder().build()
-        val pagetList: PagedList<News> = PagedList.Builder<Int, News>(dataSource, config)
-            .setNotifyExecutor(Executors.newSingleThreadExecutor())
-            .setFetchExecutor(Executors.newSingleThreadExecutor())
-            .build()
-        this.pagedList = pagetList
-        _status.value = Status.SUCCESS
+        viewModelScope.launch {
+            try {
+                list = Repository.instance.getNews().toMutableList()
+                if (list.isEmpty()){
+                    _status.value = Status.ERROR
 
+                }
+                else {
+                    _status.value = Status.SUCCESS
+                }            }
+            catch (e:Exception) {
+                Log.e("MyLog", e.toString())
+                _status.value = Status.ERROR
+            }
+        }
+    }
+
+    fun onScrolled() {
+
+        _status2.value = Status.LOADING
+        viewModelScope.launch {
+            try {
+                list = Repository.instance.getNewsPaggin(page).toMutableList()
+                page++
+                _status2.value = Status.SUCCESS
+            } catch (e: Exception) {
+                Log.e("MyLog", e.toString())
+                _status2.value = Status.ERROR
+            }
+        }
 
     }
 

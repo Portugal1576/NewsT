@@ -21,4 +21,7 @@ class Repository: Application() {
     suspend fun getNews(): List<News>{
         return api.news.get()
     }
+    suspend fun getNewsPaggin(page: Int): List<News>{
+        return api.news.getPagin(page)
+    }
 }
