@@ -19,17 +19,17 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
 
-interface NewsRetrofit{
-    @GET (".")
+interface NewsRetrofit {
+    @GET(".")
     suspend fun get(): List<News>
 
-    @GET (".")
-    suspend fun getPagin(@Query ("page") page: Int): List<News>
+    @GET(".")
+    suspend fun getPagin(@Query("page") page: Int): List<News>
 
 }
 
 // используем этот обьект для нашего запроса
-object api{
+object api {
     val news: NewsRetrofit by lazy {
         retrofit.create(NewsRetrofit::class.java)
     }

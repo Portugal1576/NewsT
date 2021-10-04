@@ -1,11 +1,9 @@
 package com.example.portugal1576.ui.fragments.news
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,54 +18,37 @@ import com.example.portugal1576.model.Status
 
 class NewsFragment : Fragment(R.layout.fragment_news) {
 
-    //инициализация viewmodel
-    private val viewModel: NewsViewModel by viewModels()
-    val adapterRV = RecyclerViewNewsAdapter {
-        Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
-    }
     private val binding: FragmentNewsBinding by viewBinding(CreateMethod.INFLATE)
+    private val viewModel: NewsViewModel by viewModels()
+
+    private val adapterRV = RecyclerViewNewsAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        //Pidding
+        initObs()
+        initListNews()
 
-        binding.listNews.addOnScrollListener(object :RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (!binding.listNews.canScrollVertically(1) && dy != 0){
-                    viewModel.onScrolled()
-                    //Toast.makeText(context, "SSSSSS", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+        return binding.root
+    }
 
+    private fun initObs() {
         viewModel.status.observe(viewLifecycleOwner, {
-            when(it){
-                Status.ERROR -> {
-
-                }
-                Status.LOADING -> {
-
-                }
-                Status.EMPTY -> {
-
-                }
+            when (it) {
                 Status.SUCCESS -> {
+
+                    // TODO: 04.10.2021
 
                     val list = viewModel.list.toMutableList()
                     val listImage = mutableListOf<News>()
-                    list.add(0, News("","","","","","", 2))
+                    list.add(0, News("", "", "", "", "", "", 2))
 
-                    for (i in 1..list.size-1){
-                        if (list[i].img !=null)
-                        listImage.add(list[i])
+                    for (i in 1 until list.size) {
+                        if (list[i].top == "1") listImage.add(list[i])
                     }
                     adapterRV.hotNews = listImage
                     adapterRV.listNews = list
@@ -77,27 +58,32 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         })
 
         viewModel.status2.observe(viewLifecycleOwner, {
-            when(it){
-                Status.ERROR -> {
-
-                }
-                Status.LOADING -> {
-
-                }
-                Status.EMPTY -> {
-
-                }
-                Status.SUCCESS -> {
-                    adapterRV.listNews.addAll(viewModel.list)
-                    adapterRV.notifyDataSetChanged()
-                    adapterRV.notifyItemRangeInserted(0, adapterRV.listNews.size)
+            when (it) {
+                Status.SUCCESS -> with(adapterRV) {
+                    listNews.addAll(viewModel.list)
+                    notifyDataSetChanged()
+                    notifyItemRangeInserted(0, adapterRV.listNews.size)
                 }
             }
         })
-
-        binding.listNews.layoutManager = LinearLayoutManager(context)
-        binding.listNews.adapter = adapterRV
-        binding.root.setBackgroundColor(Color.BLACK)
-        return binding.root
     }
+
+    private fun initListNews() = with(binding.listNews) {
+
+        layoutManager = LinearLayoutManager(context)
+        adapter = adapterRV
+
+
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (!binding.listNews.canScrollVertically(1) && dy != 0) viewModel.onScrolled()
+
+            }
+
+        })
+    }
+
 }

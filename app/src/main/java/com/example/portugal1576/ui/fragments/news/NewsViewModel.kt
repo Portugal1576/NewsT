@@ -1,6 +1,5 @@
 package com.example.portugal1576.ui.fragments.news
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +11,9 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel : ViewModel() {
 
-    var page = 0
+    private var page = 0
     var list: MutableList<News> = mutableListOf()
+
     private val _status: MutableLiveData<Status> = MutableLiveData()
     private val _status2: MutableLiveData<Status> = MutableLiveData()
     val status: LiveData<Status> get() = _status
@@ -31,15 +31,9 @@ class NewsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 list = Repository.instance.getNews().toMutableList()
-                if (list.isEmpty()){
-                    _status.value = Status.ERROR
-
-                }
-                else {
-                    _status.value = Status.SUCCESS
-                }            }
-            catch (e:Exception) {
-                Log.e("MyLog", e.toString())
+                if (list.isEmpty()) _status.value = Status.ERROR
+                else _status.value = Status.SUCCESS
+            } catch (e: Exception) {
                 _status.value = Status.ERROR
             }
         }
@@ -54,7 +48,6 @@ class NewsViewModel : ViewModel() {
                 page++
                 _status2.value = Status.SUCCESS
             } catch (e: Exception) {
-                Log.e("MyLog", e.toString())
                 _status2.value = Status.ERROR
             }
         }

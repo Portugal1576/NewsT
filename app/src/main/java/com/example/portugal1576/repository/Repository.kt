@@ -18,10 +18,6 @@ class Repository: Application() {
 
     //эта функция возвращает наш ретрофит его конвертирует в List<News>
 
-    suspend fun getNews(): List<News>{
-        return api.news.get()
-    }
-    suspend fun getNewsPaggin(page: Int): List<News>{
-        return api.news.getPagin(page)
-    }
+    suspend fun getNews(): List<News> = api.news.get()
+    suspend fun getNewsPaggin(page: Int): List<News> = api.news.getPagin(page)
 }

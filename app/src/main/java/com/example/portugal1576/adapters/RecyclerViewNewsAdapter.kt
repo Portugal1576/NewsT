@@ -2,26 +2,22 @@ package com.example.portugal1576.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.example.portugal1576.databinding.ItemImageBinding
 import com.example.portugal1576.databinding.ItemImageSliderBinding
 import com.example.portugal1576.databinding.ItemNewsBinding
 import com.example.portugal1576.model.News
 
-class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
+class RecyclerViewNewsAdapter(val callback: ((news: News) -> Unit)? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val viewType1 = 1
-    val viewType2 = 2
-    var hotNews: MutableList<News> = emptyList<News>().toMutableList()
+
+    var hotNews: MutableList<News> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    var listNews: MutableList<News> = emptyList<News>().toMutableList()
+    var listNews: MutableList<News> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -32,7 +28,7 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
         fun bind(position: Int) {
             binding.news = listNews[position]
             binding.root.setOnClickListener {
-                callback.invoke(listNews[position])
+                callback?.invoke(listNews[position])
             }
         }
 
@@ -41,10 +37,10 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
     inner class ViewHolder2(binding: ItemImageSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val binding = binding
-        var adapter = SliderAdapterExample(binding.root.context)
+        var adapter = SliderAdapterExample()
 
 
-        fun bind(position: Int) {
+        fun bind() {
 
             adapter.listNews = hotNews
             binding.imageSlider.setSliderAdapter(adapter)
@@ -56,7 +52,7 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
 
-        return if (viewType == viewType1) {
+        return if (viewType == 1) {
             ViewHolder1(ItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         } else {
             ViewHolder2(
@@ -72,11 +68,11 @@ class RecyclerViewNewsAdapter(val callback: (news: News) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 
-        if (listNews[position].viewType == viewType1) {
+        if (listNews[position].viewType == 1) {
 
             (holder as ViewHolder1).bind(position)
         } else {
-            (holder as ViewHolder2).bind(position)
+            (holder as ViewHolder2).bind()
         }
 
 

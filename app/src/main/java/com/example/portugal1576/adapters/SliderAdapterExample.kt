@@ -1,66 +1,48 @@
 package com.example.portugal1576.adapters
 
 
-import android.content.Context
-import android.graphics.Color
-
-import android.widget.TextView
-
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import coil.load
+import com.example.portugal1576.databinding.ItemImageBinding
+import com.example.portugal1576.model.News
 import com.smarteist.autoimageslider.SliderViewAdapter
 
-import android.widget.Toast
 
-import android.view.LayoutInflater
-import android.view.View
+class SliderAdapterExample :
+    SliderViewAdapter<SliderAdapterExample.ViewHolderAdapter>() {
 
-import android.view.ViewGroup
-import android.widget.ImageView
-import coil.load
-import com.example.portugal1576.R
-import com.example.portugal1576.model.News
-
-
-class SliderAdapterExample(context: Context) :
-    SliderViewAdapter<SliderAdapterExample.SliderAdapterVH>() {
-    private val context: Context
-
-    var listNews: MutableList<News> = emptyList<News>().toMutableList()
+    var listNews: MutableList<News> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
-        val inflate: View = LayoutInflater.from(parent.context).inflate(R.layout.item_image, null)
-        return SliderAdapterVH(inflate)
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolderAdapter {
+        return ViewHolderAdapter(
+            ItemImageBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolderAdapter, position: Int) {
         val sliderItem = listNews[position]
-        viewHolder.imageView.load(sliderItem.img)
-        viewHolder.title.text = sliderItem.title
-        viewHolder.url_news.text = sliderItem.click_url
-        viewHolder.time_news.text = sliderItem.time
-
+        with(viewHolder.binding) {
+            imageView.load(sliderItem.img)
+            title.text = sliderItem.title
+            urlNews.text = sliderItem.click_url
+            timeNews.text = sliderItem.time
+        }
 
 
     }
 
-    override fun getCount(): Int {
-        //slider view count could be dynamic size
-        return listNews.size
-    }
+    override fun getCount(): Int = listNews.size
 
-    inner class SliderAdapterVH(itemView: View) : ViewHolder(itemView) {
-        val imageView = itemView.findViewById<ImageView>(R.id.imageView)
-        val title = itemView.findViewById<TextView>(R.id.title)
-        val url_news = itemView.findViewById<TextView>(R.id.url_news)
-        val time_news = itemView.findViewById<TextView>(R.id.time_news)
+    inner class ViewHolderAdapter(val binding: ItemImageBinding) : ViewHolder(binding.root)
 
-    }
-
-    init {
-        this.context = context
-    }
 }
