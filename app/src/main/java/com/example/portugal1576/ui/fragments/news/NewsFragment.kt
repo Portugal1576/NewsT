@@ -41,14 +41,12 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
             when (it) {
                 Status.SUCCESS -> {
 
-                    // TODO: 04.10.2021
-
                     val list = viewModel.list.toMutableList()
                     val listImage = mutableListOf<News>()
                     list.add(0, News("", "", "", "", "", "", 2))
 
                     for (i in 1 until list.size) {
-                        if (list[i].top == "1") listImage.add(list[i])
+                        if (list[i].top == "0" && list[i].img != null) listImage.add(list[i])
                     }
                     adapterRV.hotNews = listImage
                     adapterRV.listNews = list
